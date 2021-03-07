@@ -9,8 +9,8 @@
 </head>
 <body>
     <ul>
-        <li><a href="?c=user&a=all">Пользователи</a></li>
-        <li><a href="?c=user&a=one&id=19">Пользователь №19</a></li>
+        <li><a href="?c=user">Пользователи</a></li>
+        <li><a href="?c=good">Все товары</a></li>
     </ul>
 
     <div class="content">

@@ -17,12 +17,4 @@ class User extends Model
     {
         return 'users';
     }
-
-    public function getAutUser()
-    {
-        return <<<php
-        <h1>{$this->id} => {$this->login}</h1>
-php;
-
-    }
 }

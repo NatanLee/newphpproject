@@ -39,7 +39,7 @@ abstract class Model
         return $this->bd->queryObjects($sql, static::class);
     }
 
-    public function insert()
+    protected function insert()
     {
         $columns = [];
         $params = [];
@@ -63,15 +63,35 @@ abstract class Model
 
     public function delete()
     {
-        //DELETE FROM `users` WHERE id = 12
+        //DELETE FROM users WHERE id = 12
         $tableName = $this->getTableName();
         $sql = "DELETE FROM $tableName WHERE id = :id";
         $this->bd->exec($sql, [':id' => $this->id]);
     }
 
-    public function update()
+    protected function update()
     {
-        //todo
+        //UPDATE users SET
+        // password = :password,
+        // login = 'Sap33'
+        // WHERE users.id = 12;
+
+        $placeholders = [];
+        $params = [":id" => $this->id];
+        foreach ($this as $property => $value) {
+            if ($property == 'bd' || $property == 'id') {
+                continue;
+            }
+            $placeholders[] = "{$property} = :{$property}";
+            $params[":{$property}"] = $value;
+        }
+
+        $tableName = $this->getTableName();
+        $placeholders = implode(', ', $placeholders);
+
+        $sql = "UPDATE {$tableName} SET  {$placeholders} WHERE id = :id;";
+
+        $this->bd->exec($sql, $params);
     }
 
     public function save()
@@ -83,6 +103,4 @@ abstract class Model
 
         $this->update();
     }
-
-
 }

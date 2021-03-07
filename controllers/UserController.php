@@ -4,21 +4,9 @@ namespace App\controllers;
 
 use App\modules\User;
 
-class UserController
+class UserController extends Controller
 {
     protected $defaultAction = 'all';
-
-    public function run($action)
-    {
-        if (empty($action)) {
-            $action = $this->defaultAction;
-        }
-        $method = $action . 'Action';
-        if (method_exists($this, $method) ) {
-            return $this->$method();
-        }
-        return '404';
-    }
 
     public function allAction()
     {
@@ -37,25 +25,32 @@ class UserController
         ]);
     }
 
-    public function render($template, $params = [])
+    public function addAction()
     {
-        $content = $this->renderTmpl($template, $params);
-        return  $this->renderTmpl(
-            'layouts/main',
-            ['content' => $content]
-        );
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $user = new User();
+            $user->login = $_POST['login'];
+            $user->password = password_hash($_POST['password'],PASSWORD_DEFAULT);
+            $user->save();
+            return header('Location: ?c=user');
+        }
+        return $this->render('userAdd');
     }
 
-    /**
-     * @param $template
-     * @param array $params ["users" => 123, "tr" => [1,5,6]]
-     * @return false|string
-     */
-    public function renderTmpl($template, $params = [])
+    public function updateAction()
     {
-        ob_start();
-        extract($params);
-        include dirname(__DIR__) . '/views/' . $template . '.php';
-        return ob_get_clean();
+        if (empty($_GET['id'])) {
+            return header('Location: ?c=user');
+        }
+
+        $user = (new User())->getOne($_GET['id']);
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $user->login = $_POST['login'];
+            $user->password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+            $user->save();
+            return header('Location: ?c=user');
+        }
+        return $this->render('userUpdate', ['user' => $user]);
     }
 }

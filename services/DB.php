@@ -86,19 +86,4 @@ class DB
         return $this->getConnection()->lastInsertId();
     }
 
-
-    public function insert()
-    {
-
-    }
-
-    public function update()
-    {
-
-    }
-
-    public function delete()
-    {
-
-    }
 }
