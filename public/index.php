@@ -3,21 +3,22 @@
 session_start();
 
 include dirname(__DIR__) . '/vendor/autoload.php';
-include dirname(__DIR__) . '/services/Autoload.php';
-spl_autoload_register([new Autoload(), 'loadClass']);
+$request = new \App\services\Request();
 
-$controllerName = $_GET['c'] ?: 'user';
+//$request->getException();
 
-$actionName = '';
-if (!empty($_GET['a'])) {
-    $actionName = $_GET['a'];
-}
+$controllerName = $request->getControllerName() ?: 'user';
+$actionName = $request->getActionName();
+
 
 new \Twig\Loader\FilesystemLoader();
 
 $controllerClass = 'App\\controllers\\' . ucfirst($controllerName) . 'Controller';
 
 if (class_exists($controllerClass)) {
-    $controller = new $controllerClass(new \App\services\renders\TwigRender());
+    $controller = new $controllerClass(
+        new \App\services\renders\TwigRender(),
+        $request
+    );
     echo $controller->run($actionName);
 }

@@ -3,15 +3,18 @@
 namespace App\controllers;
 
 use App\services\renders\IRender;
+use App\services\Request;
 
 abstract  class Controller
 {
     protected $defaultAction = 'all';
     protected $render;
+    protected $request;
 
-    public function __construct(IRender $render)
+    public function __construct(IRender $render, Request $request)
     {
         $this->render = $render;
+        $this->request = $request;
     }
 
     public function run($action)
@@ -29,5 +32,10 @@ abstract  class Controller
     protected function render($template, $params = [])
     {
         return $this->render->render($template, $params);
+    }
+
+    protected function getId()
+    {
+        return (int) $this->request->get('id');
     }
 }

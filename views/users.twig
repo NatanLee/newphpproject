@@ -1,0 +1,22 @@
+{% extends "layouts/main.twig" %}
+{% block title %}Все пользователи{% endblock %}
+
+{% block content %}
+    <img src="/img/img-66df5.jpg" alt="" width="200">
+    <div class="sad">
+        <a href="/user/add">Добавить пользователя</a>
+
+        {% for user in users %}
+            <h1>{{ user.login }}</h1>
+            <p>
+                <a href="/user/one?id={{ user.id }}">
+                    Подробнее
+                </a>
+            </p>
+        {% else %}
+            Net
+        {% endfor %}
+    </div>
+
+    {{ '2018-2-10' | date("d/m/Y") }}
+{% endblock %}

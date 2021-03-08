@@ -11,13 +11,16 @@ class UserController extends Controller
     public function allAction()
     {
         $users = (new User())->getAll();
-        return $this->render('users', ['users' => $users]);
+        return $this->render('users', [
+            'users' => $users,
+            'title' => 'Все пользователи'
+        ]);
     }
 
     public function oneAction()
     {
         $oUser = new User;
-        $user = $oUser->getOne($_GET['id']);
+        $user = $oUser->getOne($this->getId());
 
         return $this->render('user', [
             'user' => $user,

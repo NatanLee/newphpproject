@@ -2,27 +2,40 @@
 
 namespace App\services\renders;
 
+use Twig\Environment;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
+use Twig\Loader\FilesystemLoader;
+
 class TwigRender implements IRender
 {
-    public function render($template, $params = [])
+    protected $twig;
+
+    public function __construct()
     {
-        $content = $this->renderTmpl($template, $params);
-        return  $this->renderTmpl(
-            'layouts/main',
-            ['content' => $content]
-        );
+        $loader = new FilesystemLoader([
+            dirname(dirname(__DIR__)) . '/views/layouts',
+            dirname(dirname(__DIR__)) . '/views/',
+        ]);
+
+        $this->twig = new Environment($loader);
     }
 
-    /**
-     * @param $template
-     * @param array $params ["users" => 123, "tr" => [1,5,6]]
-     * @return false|string
-     */
+    public function render($template, $params = [])
+    {
+        $template .= '.twig';
+        try {
+            return $this->twig->render($template, $params);
+        } catch (LoaderError $e) {
+        } catch (RuntimeError $e) {
+        } catch (SyntaxError $e) {
+        }
+    }
+
+
     public function renderTmpl($template, $params = [])
     {
-        ob_start();
-        extract($params);
-        include dirname(dirname(__DIR__)) . '/views/' . $template . '.php';
-        return ob_get_clean();
+
     }
 }

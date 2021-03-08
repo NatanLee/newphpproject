@@ -1,0 +1,14 @@
+{% extends "layouts/main.twig" %}
+{% block title %}Все товары{% endblock %}
+
+{% block content %}
+        <div class="sad">
+                {% for good in goods %}
+                        <h1>{{ good.name }}</h1>
+                        <img src="/img/{{ good.img }}" alt="" width="250">
+{#                        <img src="https://twig.symfony.com/images/logo.png" alt="" width="250">#}
+                {% else %}
+                        Net
+                {% endfor %}
+        </div>
+{% endblock %}
