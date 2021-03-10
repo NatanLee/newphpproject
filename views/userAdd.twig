@@ -1,3 +1,7 @@
+{% extends "layouts/main.twig" %}
+{% block title %}Добавить пользователя{% endblock %}
+
+{% block content %}
 <h2>Добавить пользователя</h2>
 
 <form action="/user/add" method="post">
@@ -5,3 +9,4 @@
     <input type="text" name="password">
     <input type="submit">
 </form>
+{% endblock %}

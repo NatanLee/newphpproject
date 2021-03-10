@@ -7,6 +7,7 @@
                         <h1>{{ good.name }}</h1>
                         <img src="/img/{{ good.img }}" alt="" width="250">
 {#                        <img src="https://twig.symfony.com/images/logo.png" alt="" width="250">#}
+                        <a href="/order/add?id={{ good.id }}">Добавить в корзину</a>
                 {% else %}
                         Net
                 {% endfor %}

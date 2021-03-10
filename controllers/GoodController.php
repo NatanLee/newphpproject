@@ -2,6 +2,7 @@
 
 namespace App\controllers;
 
+use App\main\App;
 use App\modules\Good;
 
 class GoodController extends Controller
@@ -10,8 +11,12 @@ class GoodController extends Controller
 
     public function allAction()
     {
-        $users = (new Good())->getAll();
-        return $this->render('goods', ['goods' => $users]);
+        return $this->render(
+            'goods',
+            [
+                'goods' => App::call()->goodRepository->getAll()
+            ]
+        );
     }
 
     public function oneAction()

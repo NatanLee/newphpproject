@@ -1,20 +1,14 @@
 <?php
 namespace App\services;
 
-use App\traits\TSingleton;
-
 class DB
 {
-    use TSingleton;
+    private $config = [];
 
-    private $config = [
-        'driver' => 'mysql',
-        'host' => 'localhost',
-        'db' => 'gbphp',
-        'charset' => 'UTF8',
-        'username' => 'root',
-        'password' => '',
-    ];
+    public function __construct($config)
+    {
+        $this->config = $config;
+    }
 
     protected $connect;
 

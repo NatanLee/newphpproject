@@ -6,11 +6,17 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{% block title %}{{ title }}{% endblock %}</title>
+    <script
+            src="https://code.jquery.com/jquery-3.4.1.js"
+            integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+            crossorigin="anonymous"></script>
 </head>
 <body>
     <ul>
         <li><a href="/user">Пользователи</a></li>
         <li><a href="/good">Все товары</a></li>
+        <li><a href="/order">Корзина <span id="basket"></span></a></li>
+        <li><a href="/admin">Adminka</a></li>
     </ul>
 
     <div class="content">
@@ -18,3 +24,15 @@
     </div>
 </body>
 </html>
+
+<script>
+    jQuery.ajax({
+        type: "POST",
+        url: "/ajax/get",
+        success: function(data) {
+            console.log(data);
+            jQuery("#basket").html(data.count);
+        }
+        });
+</script>
+

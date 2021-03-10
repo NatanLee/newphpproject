@@ -12,6 +12,7 @@ class Request
 
     public function __construct()
     {
+        session_start();
         $this->requestString = $_SERVER['REQUEST_URI'];
         $this->params = [
             'get' => $_GET,
@@ -19,24 +20,6 @@ class Request
         ];
         $this->parseRequest();
     }
-
-//    public function getException()
-//    {
-//        try {
-//            if (empty($_GET['id'])) {
-//                throw new AddEx('Error in list');
-////                throw new \Exception('Error in list');
-//            }
-//        } catch (AddEx $exception) {
-//            $exception->logError();
-//        } catch (\Exception $exception) {
-//            echo $exception->getMessage();
-//        } finally {
-//            echo  ' END';
-//        }
-//
-//        echo  ' Not Error';
-//    }
 
     protected function parseRequest()
     {
@@ -55,6 +38,19 @@ class Request
 
         if (!empty($this->params['get'][$params])) {
             return $this->params['get'][$params];
+        }
+
+        return array();
+    }
+
+    public function post($params = '')
+    {
+        if (empty($params)) {
+            return $this->params['post'];
+        }
+
+        if (!empty($this->params['post'][$params])) {
+            return $this->params['post'][$params];
         }
 
         return array();
@@ -100,12 +96,3 @@ class Request
         return $this->session;
     }
 }
-
-//class AddEx extends \Exception
-//{
-//    public function logError()
-//    {
-//        echo  $this->getMessage() . 'TEST';
-//    }
-//
-//}

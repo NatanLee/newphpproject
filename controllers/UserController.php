@@ -2,7 +2,10 @@
 
 namespace App\controllers;
 
-use App\modules\User;
+use App\entities\User;
+use App\main\App;
+use App\repositories\UserRepository;
+use App\services\UserService;
 
 class UserController extends Controller
 {
@@ -10,20 +13,16 @@ class UserController extends Controller
 
     public function allAction()
     {
-        $users = (new User())->getAll();
         return $this->render('users', [
-            'users' => $users,
+            'users' => App::call()->userRepository->getAll(),
             'title' => 'Все пользователи'
         ]);
     }
 
     public function oneAction()
     {
-        $oUser = new User;
-        $user = $oUser->getOne($this->getId());
-
         return $this->render('user', [
-            'user' => $user,
+            'user' => App::call()->userRepository->getOne($this->getId()),
             'title' => 'Name'
         ]);
     }
@@ -31,29 +30,26 @@ class UserController extends Controller
     public function addAction()
     {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $user = new User();
-            $user->login = $_POST['login'];
-            $user->password = password_hash($_POST['password'],PASSWORD_DEFAULT);
-            $user->save();
+            App::call()->userService->fillUser($this->request->post());
             return header('Location: ?c=user');
         }
+
         return $this->render('userAdd');
     }
 
     public function updateAction()
     {
-        if (empty($_GET['id'])) {
-            return header('Location: ?c=user');
+        if (empty($this->getId())) {
+            return header('Location: /user');
         }
 
-        $user = (new User())->getOne($_GET['id']);
+        $user = App::call()->userRepository->getOne($this->getId());
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $user->login = $_POST['login'];
-            $user->password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-            $user->save();
-            return header('Location: ?c=user');
+            App::call()->userService->fillUser($this->request->post(), $user);
+            return header('Location: /user');
         }
+
         return $this->render('userUpdate', ['user' => $user]);
     }
 }
